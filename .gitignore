@@ -1,0 +1,6 @@
+cli
+**/*.debug
+**/*.test
+debug
+debug.test
+.DS_Store
