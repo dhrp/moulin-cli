@@ -2,10 +2,10 @@ package command
 
 import (
 	"fmt"
+	"log"
 
+	"github.com/dhrp/moulin/client"
 	"github.com/mitchellh/cli"
-	"github.com/nerdalize/moulin/client"
-	"github.com/nerdalize/moulincli/process"
 )
 
 // LoadCommand is for loading
@@ -28,24 +28,22 @@ func (c *LoadCommand) Run(args []string) int {
 		return -1
 	}
 
-	task := grpcDriver.LoadTask(args[0])
+	task, err := grpcDriver.LoadTask(args[0])
+	if err != nil {
+		log.Panic("failed loading task")
+	}
 	fmt.Printf("received taskID %s from queue\n", task.TaskID)
 	fmt.Printf("%s\n", task.Body)
-
-	result, err := process.Exec(task)
-	if err != nil {
-		return result
-	}
 
 	return 0
 }
 
 // Help (LoadCommand) shows help
 func (c *LoadCommand) Help() string {
-	return "Run as an agent (detailed help information here)"
+	return "Load and return an item"
 }
 
 // Synopsis is the short description
 func (c *LoadCommand) Synopsis() string {
-	return "Run as an agent"
+	return "Load an item"
 }

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/dhrp/moulin/client"
 	"github.com/mitchellh/cli"
-	"github.com/nerdalize/moulin/client"
 )
 
 // CreateTask is for creating a single task

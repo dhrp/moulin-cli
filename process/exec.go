@@ -11,7 +11,7 @@ import (
 
 	"github.com/mattn/go-shellwords"
 
-	pb "github.com/nerdalize/moulin/protobuf"
+	pb "github.com/dhrp/moulin/protobuf"
 )
 
 const defaultFailedCode = 1
@@ -35,10 +35,15 @@ func Exec(task *pb.Task) (result int, err error) {
 		fmt.Println("failed parsing arguments")
 	}
 
-	command := taskCommand[0]
-	args := taskCommand[1:]
+	var command string
+	var args []string
 
-	fmt.Printf("%v %v", command, args)
+	if len(taskCommand) > 0 {
+		command = taskCommand[0]
+	}
+	if len(taskCommand) > 1 {
+		args = taskCommand[1:]
+	}
 
 	cmd := exec.CommandContext(ctx, command, args...)
 	cmd.Stdin = bytes.NewBuffer(stdin)
@@ -56,8 +61,8 @@ func Exec(task *pb.Task) (result int, err error) {
 		cmd.Env = append(cmd.Env, fmt.Sprintf("%s=%s", k, v))
 	}
 
-	fmt.Printf("> command: %v; args: %v\n", command, args)
-
+	fmt.Printf("  command: %v; args: %v\n", command, args)
+	fmt.Print("> ")
 	err = cmd.Run()
 	// https://stackoverflow.com/questions/10385551/get-exit-code-go
 	if err != nil {
@@ -78,11 +83,6 @@ func Exec(task *pb.Task) (result int, err error) {
 		ws := cmd.ProcessState.Sys().(syscall.WaitStatus)
 		exitCode = ws.ExitStatus()
 	}
-
-	fmt.Printf("exitcode %d\n", exitCode)
-	// if exitCode != 0 {
-	// 	fail !!
-	// }
 
 	return exitCode, nil
 }

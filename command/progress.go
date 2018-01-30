@@ -3,9 +3,9 @@ package command
 import (
 	"fmt"
 
+	"github.com/dhrp/moulin/client"
+	pb "github.com/dhrp/moulin/protobuf"
 	"github.com/mitchellh/cli"
-	"github.com/nerdalize/moulin/client"
-	pb "github.com/nerdalize/moulin/protobuf"
 )
 
 // CreateTask is for creating a single task

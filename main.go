@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/dhrp/moulincli/command"
 	"github.com/mitchellh/cli"
-
-	"github.com/nerdalize/moulincli/command"
 )
 
 func main() {

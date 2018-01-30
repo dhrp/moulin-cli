@@ -3,9 +3,9 @@ package command
 import (
 	"fmt"
 
+	"github.com/dhrp/moulin/client"
+	"github.com/dhrp/moulincli/process"
 	"github.com/mitchellh/cli"
-	"github.com/nerdalize/moulin/client"
-	"github.com/nerdalize/moulincli/process"
 )
 
 // Work is for loading, executing, heartbeating and completing tasks
@@ -20,7 +20,7 @@ func (w *Work) Run(args []string) int {
 	grpcDriver := client.NewGRPCDriver()
 	defer grpcDriver.Connection.Close()
 
-	if len(args) > 1 {
+	if len(args) > 2 {
 		fmt.Println("received too many arguments for queue")
 		return -1
 	} else if len(args) < 1 {
@@ -28,20 +28,24 @@ func (w *Work) Run(args []string) int {
 		return -1
 	}
 
-	task := grpcDriver.LoadTask(args[0])
-	fmt.Printf("  received taskID %s from queue\n", task.TaskID)
-	fmt.Printf("  %s\n", task.Body)
-
-	result, err := process.Exec(task)
-	if err != nil {
-		return result
+	workType := "once"
+	if len(args) == 2 {
+		workType = args[1]
 	}
 
-	fmt.Println("  Task done. Marking as complete.")
-	status := grpcDriver.Complete(args[0], task.TaskID)
-	fmt.Println(status)
-
-	return 0
+	switch workType {
+	case "once":
+		process.Work(grpcDriver, args[0], "once")
+		return 0
+	case "until-finished":
+		fmt.Println("not implemented yet ")
+		return 1
+	case "forever":
+		process.Work(grpcDriver, args[0], "forever")
+		return 1
+	}
+	fmt.Println("invalid work type")
+	return 1
 }
 
 // Help (LoadCommand) shows help

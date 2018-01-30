@@ -2,7 +2,7 @@ build:
 	go build -o cli *.go
 
 run: build
-	./cli
+	./cli work q1 forever
 
 help:
 	go run *.go help
