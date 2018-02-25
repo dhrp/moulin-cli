@@ -4,11 +4,24 @@ import (
 	"fmt"
 	"os"
 
+	// or "runtime"
 	"github.com/dhrp/moulincli/command"
 	"github.com/mitchellh/cli"
 )
 
+// func cleanup() {
+// 	fmt.Println("cleanup")
+// }
+
 func main() {
+
+	// sigchan := make(chan os.Signal, 2)
+	// signal.Notify(sigchan, os.Interrupt, syscall.SIGTERM)
+	// go func() {
+	// 	<-sigchan
+	// 	cleanup()
+	// 	os.Exit(1)
+	// }()
 
 	ui := &cli.BasicUi{
 		Reader:      os.Stdin,
